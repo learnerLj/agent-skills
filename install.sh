@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-SKILLS_DIR="${AGENTS_SKILLS_DIR:-$HOME/.agents/skills}"
 BASE_URL="https://raw.githubusercontent.com/learnerLj/agent-skills/main/skills"
 
 SKILLS=(
@@ -11,12 +10,22 @@ SKILLS=(
   workflow-from-chats
 )
 
-echo "Installing agent skills to $SKILLS_DIR ..."
+install_skills() {
+  local dir="$1"
+  echo "Installing to $dir ..."
+  for skill in "${SKILLS[@]}"; do
+    mkdir -p "$dir/$skill"
+    curl -fsSL "$BASE_URL/$skill/SKILL.md" -o "$dir/$skill/SKILL.md"
+    echo "  installed: $skill"
+  done
+}
 
-for skill in "${SKILLS[@]}"; do
-  mkdir -p "$SKILLS_DIR/$skill"
-  curl -fsSL "$BASE_URL/$skill/SKILL.md" -o "$SKILLS_DIR/$skill/SKILL.md"
-  echo "  installed: $skill"
-done
+# Codex / Factory Droid
+install_skills "$HOME/.agents/skills"
+
+# Claude Code (uses a separate path)
+if [ -d "$HOME/.claude" ]; then
+  install_skills "$HOME/.claude/skills"
+fi
 
 echo "Done. Restart your agent session to activate."
