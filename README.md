@@ -4,15 +4,11 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 
 核心理念：**复杂度只能被消灭，不能被转移。**
 
-A curated collection of AI agent skills for software development. Fights the common diseases of AI-assisted code: thin wrappers, leaked logic, code that works but gets messier, and vague "make it better" requests.
-
-Core philosophy: **complexity can only be destroyed, not transferred.**
-
 ---
 
 ## Skills
 
-| Skill | What it does |
+| Skill | 作用 |
 |---|---|
 | [`thermo-nuclear-code-quality-review`](skills/thermo-nuclear-code-quality-review/SKILL.md) | 极严格代码审查：删除复杂度而不是移动它，1k+ 行文件直接打回，能跑但让代码更乱的 PR 直接拒绝 |
 | [`deslop`](skills/deslop/SKILL.md) | 清除 AI 生成的代码垃圾——薄 wrapper、泄漏的逻辑、无意义的间接层 |
@@ -43,9 +39,9 @@ python3 skills/make-goal/scripts/run_evals.py
 
 ---
 
-## Installation
+## 安装
 
-把这个 prompt 粘贴到你的 AI agent（Codex、Claude Code、Cursor 或任何编程助手）里：
+把下面的 prompt 粘贴到你的 AI agent（Codex、Claude Code、Cursor 或任何编程助手）里：
 
 ```
 Install the following agent skills from https://github.com/learnerLj/agent-skills
@@ -68,19 +64,19 @@ Platform paths:
 
 ---
 
-## Platform Support
+## 平台支持
 
-| Agent | Skills path |
+| Agent | Skills 路径 |
 |---|---|
 | [Codex](https://codex.com) | `~/.agents/skills/` |
 | [Factory Droid](https://factory.ai) | `~/.agents/skills/` |
 | [Claude Code](https://claude.ai/code) | `~/.claude/skills/` |
-| [Cursor](https://cursor.com) | `~/.cursor/skills/` or `.cursor/rules` |
+| [Cursor](https://cursor.com) | `~/.cursor/skills/` 或 `.cursor/rules` |
 | [Hermes Agent](https://hermes-agent.nousresearch.com) | `~/.hermes/skills/` |
 
 ---
 
-## Credits
+## 致谢
 
-Original skills sourced from [cursor/plugins](https://github.com/cursor/plugins) by the Cursor team.
-`make-goal` built for agent-driven development workflows.
+原始 skills 来自 Cursor 团队的 [cursor/plugins](https://github.com/cursor/plugins) 仓库。
+`make-goal` 为 agent 驱动的开发工作流而建。
