@@ -1,0 +1,189 @@
+{
+  "skill_name": "make-goal",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a goal for this repo: fix failing auth tests. The agent must reproduce first, then run npm test -- auth and npm run lint.",
+      "expected_output": "A full /goal contract with GOAL, CONTEXT, CONSTRAINTS, DONE WHEN, VERIFY, OUTPUT, STOP RULES; includes both commands, reproduction/baseline, and test-integrity constraints.",
+      "files": [],
+      "assertions": [
+        {"name": "has_full_goal_sections", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "preserves_requested_commands", "type": "contains_all", "values": ["npm test -- auth", "npm run lint"]},
+        {"name": "requires_reproduction_or_baseline", "type": "contains_any", "values": ["reproduce", "baseline", "failing output"]},
+        {"name": "protects_verification_integrity", "type": "contains_any", "values": ["Verification integrity:"] }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Make a read-only goal to investigate why active subscriptions show an empty billing state. Do not edit files.",
+      "expected_output": "A read-only investigation /goal whose DONE WHEN is a root-cause report with evidence; it must not instruct code edits or patches.",
+      "files": [],
+      "assertions": [
+        {"name": "has_full_goal_sections", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "states_read_only_boundary", "type": "contains_any", "values": ["read-only", "Do not edit files", "Do not modify"]},
+        {"name": "done_when_root_cause_report", "type": "contains_all", "values": ["root cause", "evidence"]},
+        {"name": "does_not_instruct_patch", "type": "not_contains_any", "values": ["apply a fix", "patch the code", "edit implementation"] }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate a goal to add a unique index to users.email in a large production database.",
+      "expected_output": "A high-risk full /goal with migration dry-run, rollback, row-count/checksum or equivalent evidence, and stop rules for production credentials or destructive operations.",
+      "files": [],
+      "assertions": [
+        {"name": "has_full_goal_sections", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "requires_migration_safety_evidence", "type": "contains_all", "values": ["dry-run", "rollback"]},
+        {"name": "requires_data_integrity_check", "type": "contains_any", "values": ["row count", "checksum", "duplicate"]},
+        {"name": "stops_on_production_or_destructive_access", "type": "contains_all", "values": ["production", "destructive"] }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Generate a goal to fix a frontend XSS risk from user-provided links.",
+      "expected_output": "A security-focused full /goal that requires protocol allowlist validation, avoids blacklist-only guidance, mentions unsafe sinks such as innerHTML when relevant, and includes tests or browser smoke evidence.",
+      "files": [],
+      "assertions": [
+        {"name": "has_full_goal_sections", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "requires_protocol_allowlist", "type": "contains_any", "values": ["protocol allowlist", "protocol whitelist", "allowlist"]},
+        {"name": "mentions_unsafe_sinks_or_html", "type": "contains_any", "values": ["innerHTML", "unsafe HTML", "unsafe sink"]},
+        {"name": "requires_test_or_browser_evidence", "type": "contains_any", "values": ["test", "browser", "Playwright", "smoke"] }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Help me make this project better.",
+      "expected_output": "A clarify-first response asking for the primary goal, real context, constraints, and done-when evidence; it should not generate a broad execution goal.",
+      "files": [],
+      "assertions": [
+        {"name": "clarifies_instead_of_executing", "type": "contains_any", "values": ["primary goal", "one finish line", "What is the one"]},
+        {"name": "asks_for_context", "type": "contains_any", "values": ["files", "issue", "logs", "context"]},
+        {"name": "asks_for_done_when_or_verification", "type": "contains_any", "values": ["done", "verify", "completion", "proves"]},
+        {"name": "does_not_emit_full_goal_contract", "type": "not_contains_any", "values": ["/goal\nGOAL:", "CONSTRAINTS:", "STOP RULES:"] }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Create a compact goal for fixing auth tests when the files and commands are already known: read auth routes and tests, run npm test -- auth and npm run lint.",
+      "expected_output": "A compact /goal with Read first, Constraints, Done when, Verify with, Stop if, and Final output; it should preserve the provided commands and test-integrity constraints.",
+      "files": [],
+      "assertions": [
+        {"name": "has_compact_goal_sections", "type": "contains_all", "values": ["/goal", "Read first:", "Constraints:", "Done when:", "Verify with:", "Stop if:", "Final output:"]},
+        {"name": "preserves_requested_commands", "type": "contains_all", "values": ["npm test -- auth", "npm run lint"]},
+        {"name": "protects_verification_integrity", "type": "contains_any", "values": ["Verification integrity:"] }
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Create a goal for a launch-readiness pass before a GitHub Trending push. It should cover README positioning, GitHub Pages first viewport, share-preview assets, and repo metadata guidance, but Trending itself is not guaranteed.",
+      "expected_output": "A full /goal that includes a launch/readiness scope fuse, treats external platform guidance as advisory unless locally required, and explicitly avoids guaranteeing GitHub Trending or similar external outcomes.",
+      "files": [],
+      "assertions": [
+        {"name": "has_full_goal_sections", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "has_scope_fuse", "type": "contains_any", "values": ["scope fuse", "multiple independent PR-sized changes", "follow-up PRs"]},
+        {"name": "bounds_external_guidance", "type": "contains_any", "values": ["advisory", "external platform", "not guaranteed"]},
+        {"name": "does_not_guarantee_trending", "type": "not_contains_any", "values": ["guarantee GitHub Trending", "guaranteed Trending placement", "guarantee trending placement"] }
+      ]
+    }
+  ],
+  "skill_contract_checks": [
+    {
+      "id": "skill-has-required-sections",
+      "file": "../SKILL.md",
+      "assertions": [
+        {"name": "has_operating_modes", "type": "contains_all", "values": ["create", "tighten", "review"]},
+        {"name": "has_full_template", "type": "contains_all", "values": ["GOAL:", "CONTEXT:", "CONSTRAINTS:", "DONE WHEN:", "VERIFY:", "OUTPUT:", "STOP RULES:"]},
+        {"name": "has_safety_defaults", "type": "contains_any", "values": ["Verification integrity", "Stop on secrets", "three failed attempts"]},
+        {"name": "has_self_check", "type": "contains_any", "values": ["Self-Check", "self-check", "Before responding"]}
+      ]
+    }
+  ],
+  "fixture_cases": [
+    {
+      "id": "pass-launch-readiness-scope-fuse",
+      "file": "fixtures/pass/launch_readiness_scope_fuse.md",
+      "profile": "auto",
+      "expected_lint_pass": true,
+      "assertions": [
+        {"name": "has_scope_fuse", "type": "contains_any", "values": ["multiple independent PR-sized changes", "follow-up PRs"]},
+        {"name": "does_not_guarantee_external_outcome", "type": "contains_any", "values": ["external outcome", "not guaranteed"]}
+      ]
+    },
+    {
+      "id": "pass-read-only-research",
+      "file": "fixtures/pass/read_only_research.md",
+      "profile": "auto",
+      "expected_lint_pass": true,
+      "assertions": [
+        {"name": "states_read_only", "type": "contains_any", "values": ["read-only", "Do not edit files"]},
+        {"name": "does_not_force_root_cause", "type": "not_contains_any", "values": ["root cause"]}
+      ]
+    },
+    {
+      "id": "pass-xss-output-encoding",
+      "file": "fixtures/pass/xss_output_encoding.md",
+      "profile": "auto",
+      "expected_lint_pass": true,
+      "assertions": [
+        {"name": "mentions_unsafe_sink", "type": "contains_any", "values": ["innerHTML", "unsafe sink"]},
+        {"name": "does_not_require_link_allowlist", "type": "not_contains_any", "values": ["protocol allowlist"]}
+      ]
+    },
+    {
+      "id": "pass-growth-plan-read-only",
+      "file": "fixtures/pass/growth_plan_read_only.md",
+      "profile": "auto",
+      "expected_lint_pass": true,
+      "assertions": [
+        {"name": "external_outcomes_not_guaranteed", "type": "contains_all", "values": ["external outcome targets", "not guaranteed"]},
+        {"name": "has_scope_fuse", "type": "contains_any", "values": ["multiple independent PR-sized changes", "follow-up PRs"]},
+        {"name": "has_manual_platform_blocker", "type": "contains_any", "values": ["repository settings changes requiring owner approval", "manual platform blockers"]}
+      ]
+    },
+    {
+      "id": "fail-fake-context-generic-done",
+      "file": "fixtures/fail/fake_context_generic_done.md",
+      "profile": "auto",
+      "expected_lint_pass": false,
+      "assertions": [
+        {"name": "contains_fake_context", "type": "contains_any", "values": ["Read relevant files"]},
+        {"name": "contains_generic_verify", "type": "contains_any", "values": ["Run tests"]}
+      ]
+    },
+    {
+      "id": "fail-migration-without-dry-run",
+      "file": "fixtures/fail/migration_without_dry_run.md",
+      "profile": "auto",
+      "expected_lint_pass": false,
+      "assertions": [
+        {"name": "missing_dry_run", "type": "not_contains_any", "values": ["dry-run"]}
+      ]
+    },
+    {
+      "id": "fail-read-only-patch",
+      "file": "fixtures/fail/read_only_patch.md",
+      "profile": "auto",
+      "expected_lint_pass": false,
+      "assertions": [
+        {"name": "contains_patch_instruction", "type": "contains_any", "values": ["patch the code"]}
+      ]
+    },
+    {
+      "id": "fail-xss-blacklist-only-link",
+      "file": "fixtures/fail/xss_blacklist_only_link.md",
+      "profile": "auto",
+      "expected_lint_pass": false,
+      "assertions": [
+        {"name": "contains_blacklist_only", "type": "contains_any", "values": ["blacklist-only"]}
+      ]
+    },
+    {
+      "id": "fail-launch-without-scope-fuse",
+      "file": "fixtures/fail/launch_without_scope_fuse.md",
+      "profile": "auto",
+      "expected_lint_pass": false,
+      "assertions": [
+        {"name": "missing_scope_fuse", "type": "not_contains_any", "values": ["multiple independent PR-sized changes", "scope fuse", "follow-up PRs"]}
+      ]
+    }
+  ]
+}
