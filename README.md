@@ -8,34 +8,13 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 
 ## Skills
 
-| Skill | 作用 |
-|---|---|
-| [`thermo-nuclear-code-quality-review`](skills/thermo-nuclear-code-quality-review/SKILL.md) | 极严格代码审查：删除复杂度而不是移动它，1k+ 行文件直接打回，能跑但让代码更乱的 PR 直接拒绝 |
-| [`deslop`](skills/deslop/SKILL.md) | 清除 AI 生成的代码垃圾——薄 wrapper、泄漏的逻辑、无意义的间接层 |
-| [`verify-this`](skills/verify-this/SKILL.md) | 用本地证据验证声明，返回 VERIFIED / NOT VERIFIED / INCONCLUSIVE |
-| [`workflow-from-chats`](skills/workflow-from-chats/SKILL.md) | 从最近的 agent 对话中提取持久的工作偏好，转化为可复用的 skill 或规则 |
-| [`make-goal`](skills/make-goal/SKILL.md) | 把模糊的工程意图转化为可执行的 `/goal` 任务契约——一个目标、硬约束、可审计的验证、和停机规则 |
-
----
-
-## make-goal
-
-这个 skill 比较特殊，自带工具链：
-
-- **lint** — 检查 goal 合约的结构性缺陷（必需字段、模糊语言、缺失的安全约束）
-- **evals** — 17 个 fixture 测试（8 个 pass、5 个 fail、4 个 skill 自检），覆盖 auth、migration、XSS、read-only、launch-readiness 场景
-- **references** — 合约模板、模式选择指南、质量标准、40+ 个 source-backed 和 seed 模式
-
-```bash
-# lint 一个 goal 文件
-python3 skills/make-goal/scripts/lint_goal.py my-goal.md
-
-# 用特定 profile lint
-python3 skills/make-goal/scripts/lint_goal.py my-goal.md --profile data-migration
-
-# 跑 evals
-python3 skills/make-goal/scripts/run_evals.py
-```
+| Skill | 解决什么问题 | 触发时机 | 核心机制 | 产出 |
+|---|---|---|---|---|
+| [`thermo-nuclear-code-quality-review`](skills/thermo-nuclear-code-quality-review/SKILL.md) | AI 写的代码能跑但越来越乱，复杂度只是被搬来搬去 | 要求严格审查、深度代码质量审计、或"用核弹级别的标准审一遍" | 10 条不可协商规则：寻找 code judo 重构点、1k 行文件硬上限、禁止 spaghetti 增长、删除复杂度而非移动它 | 逐条审查报告，带具体重构建议和删除目标 |
+| [`deslop`](skills/deslop/SKILL.md) | AI 生成的薄 wrapper、多余注释、无意义的 `any` 转换、防御性检查堆砌 | 分支里有 AI 生成的 diff，或"帮我清理 AI 写的代码" | 对比 main 分支的 diff，按模式匹配 5 类 slop（多余注释、异常防御、`any` 绕过、深层嵌套、风格不一致） | 最小化的精简 diff，1-3 句总结 |
+| [`verify-this`](skills/verify-this/SKILL.md) | "修好了"但没有证据，agent 自己说 PASS 就完事 | 用户说"验证一下"、"证明它能用"、"修好了吗"、"给我看证据" | 把声明改写为可证伪形式 → 捕获 baseline → 捕获 treatment → 对比原始 artifact | 唯一裁决：`VERIFIED` / `NOT VERIFIED` / `INCONCLUSIVE` + 证据文件 |
+| [`workflow-from-chats`](skills/workflow-from-chats/SKILL.md) | 同样的偏好每次都要重复说，agent 总犯同样的错 | "从我的对话里学偏好"、"记住我怎么工作的"、"生成我的 rules" | 扫描最近 7 天对话 → 提取偏好原子（触发/步骤/规则/质量线/停机条件） → 按置信度分级 → 聚类为工作流形状 | 新 skill、rule 文件、或 workflow 文档（按置信度决定写不写） |
+| [`make-goal`](skills/make-goal/SKILL.md) | "帮我把这个项目变好"式无效指令，agent 不知道做到什么程度算完 | 要写 goal、review goal、把 issue/PR/bug report 转为可执行任务 | 6 步合约：单一目标 → 真实上下文 → 硬约束 → 可审计完成条件 → 新鲜验证 → 停机规则；7 个 lint profile 覆盖安全/迁移/前端/只读等场景 | `/goal` 合约（full 或 compact 格式）+ 40+ 个可复用模式库 |
 
 ---
 
