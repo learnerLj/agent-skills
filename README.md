@@ -11,9 +11,10 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 | Skill | 解决什么问题 | 触发时机 | 核心机制 | 产出 |
 |---|---|---|---|---|
 | [`thermo-nuclear-code-quality-review`](skills/thermo-nuclear-code-quality-review/SKILL.md) | AI 写的代码能跑但越来越乱，复杂度只是被搬来搬去 | 要求严格审查、深度代码质量审计、或"用核弹级别的标准审一遍" | 10 条不可协商规则：寻找 code judo 重构点、1k 行文件硬上限、禁止 spaghetti 增长、删除复杂度而非移动它 | 逐条审查报告，带具体重构建议和删除目标 |
-| [`deslop`](skills/deslop/SKILL.md) | AI 生成的薄 wrapper、多余注释、无意义的 `any` 转换、防御性检查堆砌 | 分支里有 AI 生成的 diff，或"帮我清理 AI 写的代码" | 对比 main 分支的 diff，按模式匹配 5 类 slop（多余注释、异常防御、`any` 绕过、深层嵌套、风格不一致） | 最小化的精简 diff，1-3 句总结 |
+| [`deslop`](skills/deslop/SKILL.md) | AI 生成的薄 wrapper、多余注释、无意义的 `any` 转换、防御性检查堆砌 | 分支里有 AI 生成的 diff，或"帮我清理 AI 写的代码" | 对比 main 分支 of diff，按模式匹配 5 类 slop（多余注释、异常防御、`any` 绕过、深层嵌套、风格不一致） | 最小化的精简 diff，1-3 句总结 |
 | [`verify-this`](skills/verify-this/SKILL.md) | "修好了"但没有证据，agent 自己说 PASS 就完事 | 用户说"验证一下"、"证明它能用"、"修好了吗"、"给我看证据" | 把声明改写为可证伪形式 → 捕获 baseline → 捕获 treatment → 对比原始 artifact | 唯一裁决：`VERIFIED` / `NOT VERIFIED` / `INCONCLUSIVE` + 证据文件 |
 | [`make-goal`](skills/make-goal/SKILL.md) | "帮我把这个项目变好"式无效指令，agent 不知道做到什么程度算完 | 要写 goal、review goal、把 issue/PR/bug report 转为可执行任务 | 6 步合约：单一目标 → 真实上下文 → 硬约束 → 可审计完成条件 → 新鲜验证 → 停机规则；7 个 lint profile 覆盖安全/迁移/前端/只读等场景 | `/goal` 合约（full 或 compact 格式）+ 40+ 个可复用模式库 |
+| [`dedaub-decompiler`](skills/dedaub-decompiler/SKILL.md) | unverified EVM 合约反编译与逆向分析数据高速获取（无需浏览器） | 需要反编译字节码、分析 EVM 合约逻辑、获取 Solidity 伪代码、Yul 格式代码或 AI 重构源码 | 使用本地 Go 二进制 CLI 请求 Dedaub 数据端点，支持以太坊/Base/Arbitrum/Optimism/Polygon/BNB Chain，内置十六进制全小写 308 重定向避坑机制 | 纯 JSON 格式或各部件（source, disassembled, tac, yul, bytecode）分片文件 |
 
 ---
 
@@ -25,7 +26,7 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 Install the following agent skills from https://github.com/learnerLj/agent-skills
 by downloading each SKILL.md into the correct skills directory.
 
-Skills: thermo-nuclear-code-quality-review, deslop, verify-this, make-goal.
+Skills: thermo-nuclear-code-quality-review, deslop, verify-this, make-goal, dedaub-decompiler.
 
 Base URL for raw files:
 https://raw.githubusercontent.com/learnerLj/agent-skills/main/skills/{skill-name}/SKILL.md
