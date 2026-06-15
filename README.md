@@ -1,8 +1,6 @@
 # agent-skills
 
-AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrapper 堆积、逻辑泄漏、能跑但越来越乱的代码、以及"帮我把这个项目变好"式的无效指令。
-
-核心理念：**复杂度只能被消灭，不能被转移。**
+AI 编程 Agent 的 Skill 合集。
 
 ---
 
@@ -10,6 +8,7 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 
 | Skill | 解决什么问题 | 触发时机 | 核心机制 | 产出 |
 |---|---|---|---|---|
+| [`claude-code-ultracode-patch`](skills/claude-code-ultracode-patch/SKILL.md) | Claude Code 的 ultracode 模式被服务端门控锁定 | 要求解锁 ultracode、patch Claude Code 二进制、或绕过 workflow feature flag | 结构化正则匹配门控函数模板（混淆名每版变，结构模板跨版本稳定），等长替换 patch | 已 patch 的二进制 + `ULTRACODE_PATCH` 标记 |
 | [`thermo-nuclear-code-quality-review`](skills/thermo-nuclear-code-quality-review/SKILL.md) | AI 写的代码能跑但越来越乱，复杂度只是被搬来搬去 | 要求严格审查、深度代码质量审计、或"用核弹级别的标准审一遍" | 10 条不可协商规则：寻找 code judo 重构点、1k 行文件硬上限、禁止 spaghetti 增长、删除复杂度而非移动它 | 逐条审查报告，带具体重构建议和删除目标 |
 | [`deslop`](skills/deslop/SKILL.md) | AI 生成的薄 wrapper、多余注释、无意义的 `any` 转换、防御性检查堆砌 | 分支里有 AI 生成的 diff，或"帮我清理 AI 写的代码" | 对比 main 分支 of diff，按模式匹配 5 类 slop（多余注释、异常防御、`any` 绕过、深层嵌套、风格不一致） | 最小化的精简 diff，1-3 句总结 |
 | [`verify-this`](skills/verify-this/SKILL.md) | "修好了"但没有证据，agent 自己说 PASS 就完事 | 用户说"验证一下"、"证明它能用"、"修好了吗"、"给我看证据" | 把声明改写为可证伪形式 → 捕获 baseline → 捕获 treatment → 对比原始 artifact | 唯一裁决：`VERIFIED` / `NOT VERIFIED` / `INCONCLUSIVE` + 证据文件 |
@@ -26,7 +25,7 @@ AI 编程 Agent 的 Skill 合集。对抗 AI 辅助编程的常见病：薄 wrap
 Install the following agent skills from https://github.com/learnerLj/agent-skills
 by downloading each SKILL.md into the correct skills directory.
 
-Skills: thermo-nuclear-code-quality-review, deslop, verify-this, make-goal, skill-creator.
+Skills: claude-code-ultracode-patch, thermo-nuclear-code-quality-review, deslop, verify-this, make-goal, skill-creator.
 
 Base URL for raw files:
 https://raw.githubusercontent.com/learnerLj/agent-skills/main/skills/{skill-name}/SKILL.md
@@ -47,18 +46,6 @@ Platform paths:
 - Claude Code: ~/.claude/skills/
 - Cursor: ~/.cursor/skills/ or project .cursor/rules/
 ```
-
----
-
-## 平台支持
-
-| Agent | Skills 路径 |
-|---|---|
-| [Codex](https://codex.com) | `~/.agents/skills/` |
-| [Factory Droid](https://factory.ai) | `~/.agents/skills/` |
-| [Claude Code](https://claude.ai/code) | `~/.claude/skills/` |
-| [Cursor](https://cursor.com) | `~/.cursor/skills/` 或 `.cursor/rules` |
-| [Hermes Agent](https://hermes-agent.nousresearch.com) | `~/.hermes/skills/` |
 
 ---
 
